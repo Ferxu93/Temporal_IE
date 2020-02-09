@@ -14,7 +14,8 @@ pd.options.display.float_format = '{:.3f}'.format
 Blockchain_df = pd.read_csv('/Users/fer/Desktop/BlockChain_Train_csv.csv', sep=',')
 print(Blockchain_df)
 
-Blockchain_loc = Blockchain_df.iloc[:, [0, 5, 11]]
+Blockchain_df.index = Blockchain_df.Date
+Blockchain_loc = Blockchain_df.iloc[:, [5, 11]]
 print(Blockchain_loc)
 
 print('ATRIBUTES\n\n: ')
@@ -26,7 +27,7 @@ print(' Those are the dimensions of the columns: \n\n ', Blockchain_loc.shape)
 
 Blockchain_BlockSize = Blockchain_loc['BlockSize']
 
-Blockchain_BlockSize_plot = 0
+Blockchain_BlockSize_plot = 1
 if Blockchain_BlockSize_plot == 1:
     Blockchain_BlockSize.plot(kind= 'box')
     plt.grid(), plt.show(), plt.clf()
@@ -36,7 +37,7 @@ IQR = Blockchain_BlockSize.quantile(q)
 print(IQR)
 print(Blockchain_BlockSize.describe())
 
-IQR_plot = 0
+IQR_plot = 1
 if IQR_plot== 1:
     IQR.plot(kind='box')
     plt.title('IQR_BOXPLOT')
@@ -44,9 +45,8 @@ if IQR_plot== 1:
 
 Blockchain_Difficulty = Blockchain_loc['Difficulty']
 
-Blockchain_Difficulty_plot = 0
+Blockchain_Difficulty_plot = 1
 if Blockchain_Difficulty_plot == 1:
     Blockchain_Difficulty.plot()
     plt.grid(), plt.show(), plt.clf()
-
 
