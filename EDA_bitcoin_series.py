@@ -37,5 +37,37 @@ Blockchain_USDEUR_df = Blockchain_df['USD/EUR']
 print(Blockchain_USDEUR_df)
 print(type(Blockchain_USDEUR_df))
 
+Blockchain_USDEUR_plot = 0
+if Blockchain_USDEUR_plot == 1:
+     # Blockchain_USDEUR_df.plot(kind='line', color='red')
+     # Blockchain_USDEUR_df.plot(kind='hist', color='blue', bins=10)
+      Blockchain_USDEUR_df.plot(kind='hist', color='lightgreen', bins=10, cumulative=True)
+     # Blockchain_USDEUR_df.plot(kind='hist', color='lightblue', bins=len(Blockchain_USDEUR_df), density=True, range=(0,11))
+      plt.grid(), plt.show(), plt.clf()
 
+'''PRINTING IQR'''
+q = [0.25, 0.75]
+IQR = Blockchain_USDEUR_df.quantile(q)
+print(IQR)
+print(Blockchain_USDEUR_df.describe())
+
+'''PLOTING IQR'''
+Blockchain_USDEUR_boxplot = 0
+if Blockchain_USDEUR_boxplot == 1:
+      Blockchain_USDEUR_df.plot(kind='box', color='blue')
+      plt.grid(), plt.show(), plt.clf()
+
+'''MULTIPLOTING IN ONE PLOT'''
+Multiploting = 0
+if Multiploting == 1:
+      Blockchain_df['USD/EUR'].plot(kind='line', color='red')
+      Blockchain_df['USD/JPY'].plot(kind='line', color='green')
+      Blockchain_df['USD/CHF'].plot(kind='line', color='purple')
+      plt.grid(), plt.show(), plt.clf()
+
+Correlation = Blockchain_df['USD/EUR'].corr(Blockchain_df['USD/CHF'])
+print(Correlation)
+
+
+'''MULTIPLOTING IN SUBPLOTS'''
 
