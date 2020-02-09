@@ -8,7 +8,7 @@ pd.set_option('display.width', desired_width)
 np.set_printoptions(linewidth=desired_width)
 pd.set_option('display.max_colwidth', 100)
 pd.set_option('display.max_columns', 30)
-pd.set_option('display.max_rows', 30)
+pd.set_option('display.max_rows', 300)
 pd.options.display.float_format = '{:.3f}'.format
 
 Blockchain_df = pd.read_csv('/Users/fer/Desktop/BlockChain_Train_csv.csv', sep=',')
@@ -96,7 +96,43 @@ if Blockchain_mean_difficulty_plot ==1:
 Blockchain_USDJPY_maxvalue = Blockchain_df['USD/JPY'].resample('M').max()
 print(Blockchain_USDJPY_maxvalue)
 
-Blockchain_USDJPY_maxvalue_plot = 1
+Blockchain_USDJPY_maxvalue_plot = 0
 if Blockchain_USDJPY_maxvalue_plot == 1:
     Blockchain_USDJPY_maxvalue.plot(kind='line', color='red')
     plt.grid(), plt.show(), plt.clf()
+
+'''SUBSETTING TS-BASED DATAFRAMES (+ NANS MANAGEMENT)'''
+
+Nov1111 = Blockchain_df.loc['2011-11-11', 'Bitcoins_in_circulation']
+print('\nThe Bitcoins in circulation for this day are:', Nov1111)
+
+# To select on a desired date range:
+My_date_range = Blockchain_df.loc['2012-10-18':'2018-05-31']
+print('During this two dates the Bitcoins in circulation were: ', My_date_range)
+
+
+#Blockchain_df = Blockchain_df.dropna()
+#Blockchain_df = Blockchain_df.fillna(0)
+#Blockchain_df['USD/EUR'] = Blockchain_df['USD/EUR'].fillna(method='bfill')
+#Blockchain_df['USD/EUR'] = Blockchain_df['USD/EUR'].interpolate(how='quadratic')
+#print(Blockchain_df)
+
+
+'''SMOOTHING SERIES'''
+
+usdjpy = Blockchain_df['USD/JPY']
+usdjpy_rolled = Blockchain_df['USD/JPY'].rolling(window=8).mean()
+rolled_Vs_nonrolled_plot = 1
+if rolled_Vs_nonrolled_plot == 1:
+    usdjpy.plot(kind='line', color='red')
+    usdjpy_rolled.plot(kind='line', color='darkblue')
+    plt.grid(), plt.show(), plt.clf()
+
+'''ROLLED AND NONROLLED DF & COLUMN RENAMING'''
+
+usdjpy_df = pd.DataFrame(usdjpy, usdjpy_rolled).rename(columns={'USD/JPY': 'ROLLED'})
+usdjpy_df['NONROLLED'] = Blockchain_df['USD/JPY'].values
+usdjpy_df['ROLLED'] = usdjpy_df.index
+usdjpy_df.index = Blockchain_df.index
+print(usdjpy_df.head(40))
+
