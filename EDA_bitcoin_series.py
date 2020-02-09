@@ -12,6 +12,7 @@ pd.set_option('display.max_rows', 30)
 pd.options.display.float_format = '{:.3f}'.format
 
 Blockchain_df = pd.read_csv('/Users/fer/Desktop/BlockChain_Train_csv.csv', sep=',')
+Blockchain_df['Date'] = pd.to_datetime(Blockchain_df.Date)
 print(Blockchain_df)
 
 Blockchain_subdf = Blockchain_df.iloc[:, 0:4]
@@ -71,3 +72,31 @@ print(Correlation)
 
 '''MULTIPLOTING IN SUBPLOTS'''
 
+Subploting1 = 0
+if Subploting1 == 1:
+    fig, axs = plt.subplots(nrows=3, ncols=1)
+    Blockchain_df['USD/EUR'].plot(kind='line', color='red', ax=axs[0])
+    Blockchain_df['USD/JPY'].plot(kind='line', color='green', ax=axs[1])
+    Blockchain_df['USD/CHF'].plot(kind='line', color='purple', ax=axs[2])
+    plt.grid(), plt.show(), plt.clf()
+
+
+'''GROUPING BY (GENERAL METHOD & TIME METHOD)'''
+# for each difficulty level, get the mean of Bitcoins in circulation:
+Blockchain_mean_difficulty = Blockchain_df.groupby(by=['Difficulty'])['Bitcoins_in_circulation'].mean()
+print(Blockchain_mean_difficulty)
+
+Blockchain_mean_difficulty_plot = 0
+if Blockchain_mean_difficulty_plot ==1:
+    Blockchain_mean_difficulty.plot(kind='line', color= 'blue')
+    plt.grid(), plt.show(), plt.clf()
+
+'''TIME METHOD'''
+# Max value of the relation USD/JPY for each month:
+Blockchain_USDJPY_maxvalue = Blockchain_df['USD/JPY'].resample('M').max()
+print(Blockchain_USDJPY_maxvalue)
+
+Blockchain_USDJPY_maxvalue_plot = 1
+if Blockchain_USDJPY_maxvalue_plot == 1:
+    Blockchain_USDJPY_maxvalue.plot(kind='line', color='red')
+    plt.grid(), plt.show(), plt.clf()
