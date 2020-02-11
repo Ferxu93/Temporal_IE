@@ -122,7 +122,7 @@ print('During this two dates the Bitcoins in circulation were: ', My_date_range)
 
 usdjpy = Blockchain_df['USD/JPY']
 usdjpy_rolled = Blockchain_df['USD/JPY'].rolling(window=8).mean()
-rolled_Vs_nonrolled_plot = 1
+rolled_Vs_nonrolled_plot = 0
 if rolled_Vs_nonrolled_plot == 1:
     usdjpy.plot(kind='line', color='red')
     usdjpy_rolled.plot(kind='line', color='darkblue')
@@ -136,3 +136,16 @@ usdjpy_df['ROLLED'] = usdjpy_df.index
 usdjpy_df.index = Blockchain_df.index
 print(usdjpy_df.head(40))
 
+year_df = pd.DatetimeIndex
+
+'''LAMBDAS(a one-liner great option)'''
+
+usdeur_add1 = Blockchain_df['USD/EUR'].apply(lambda x: x+1)
+print('\nthis is :\n', usdeur_add1)
+
+'''CORRELATION ANALYSIS: BASE DATA VS PERCENTAGE DATA'''
+
+fig, axs = plt.subplots(nrows=2, ncols=1)
+Blockchain_df[['Close']].plot(ax=axs[0])
+plt.plot(Blockchain_df[['Close']].pct_change())
+plt.show()
