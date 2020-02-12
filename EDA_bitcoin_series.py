@@ -59,16 +59,13 @@ if Blockchain_USDEUR_boxplot == 1:
       plt.grid(), plt.show(), plt.clf()
 
 '''MULTIPLOTING IN ONE PLOT'''
+
 Multiploting = 0
 if Multiploting == 1:
       Blockchain_df['USD/EUR'].plot(kind='line', color='red')
       Blockchain_df['USD/JPY'].plot(kind='line', color='green')
       Blockchain_df['USD/CHF'].plot(kind='line', color='purple')
       plt.grid(), plt.show(), plt.clf()
-
-Correlation = Blockchain_df['USD/EUR'].corr(Blockchain_df['USD/CHF'])
-print(Correlation)
-
 
 '''MULTIPLOTING IN SUBPLOTS'''
 
@@ -145,7 +142,66 @@ print('\nthis is :\n', usdeur_add1)
 
 '''CORRELATION ANALYSIS: BASE DATA VS PERCENTAGE DATA'''
 
-fig, axs = plt.subplots(nrows=2, ncols=1)
-Blockchain_df[['Close']].plot(ax=axs[0])
-plt.plot(Blockchain_df[['Close']].pct_change())
-plt.show()
+Blockchain_df_close_plot = 0
+if Blockchain_df_close_plot == 1:
+    fig, axs = plt.subplots(nrows=2, ncols=1)
+    Blockchain_df[['Close']].plot(ax=axs[0])
+    plt.plot(Blockchain_df[['Close']].pct_change())
+    plt.show()
+
+''''CORRELATION AND AUTOCORRELATION (ACF & PLOTTING)'''
+
+Correlation = Blockchain_df['USD/EUR'].corr(Blockchain_df['USD/CHF'])
+print('\n This is the correlation between both:', Correlation)
+
+
+# Imported libraries for Autocorrelation:
+
+from statsmodels.tsa.stattools import acf
+from statsmodels.graphics.tsaplots import plot_acf
+
+Autocorrelation = Blockchain_df['Breakeven Inflation Rate'].autocorr()
+print('\n This is the Autocorrelation:', Autocorrelation)
+
+Acf = acf(Blockchain_df['Breakeven Inflation Rate'])
+print('\n This is the ACF: ', Acf)
+print('\n This is the lenght:',len(Acf))
+
+Blockchain_df_acf_plot = 0
+if Blockchain_df_acf_plot == 1:
+    plot_acf(Blockchain_df['Breakeven Inflation Rate'], lags=20, alpha=0.5)
+    plt.show()
+
+'''WHITE NOISE & GAUSSIAN WHITE NOISE'''
+
+Blockchain_df_WN = 0
+if Blockchain_df_WN == 1:
+    fig, axs = plt.subplots(nrows=3, ncols=1)
+    Blockchain_df[['Breakeven Inflation Rate']].plot(ax=axs[0])
+    Blockchain_df[['Breakeven Inflation Rate']].plot(kind='hist',alpha=0.8, ax=axs[1])
+    plot_acf(Blockchain_df['Breakeven Inflation Rate'],lags=20, alpha=0.2, ax=axs[2])
+    plt.show()
+
+'''REGRESSION ANALYSIS'''
+
+import statsmodels.api as sma
+
+Blockchain_df = sma.add_constant(Blockchain_df)
+intercept_y = sma.OLS(Blockchain_df['Breakeven Inflation Rate'], Blockchain_df[['const','US Federal funds rate']]).fit()
+print('Results:', intercept_y.summary())
+print('Constant Coefficient:',intercept_y.params[0])
+print('Independent Variable:',intercept_y.params[1])
+
+''' DICKEY FULLER TEST & AUGMENTED DICKEY FULLER TEST'''
+
+from statsmodels.tsa.stattools import adfuller
+
+adfuller_test = adfuller(Blockchain_df['Breakeven Inflation Rate'])
+print(adfuller_test)
+print('p-value: ', adfuller_test[1])
+alpha = 0.05
+if adfuller_test[1] > alpha:
+    print('The Null Hypothesis cant be rejected: It may not be a Random Walk(IT MAY BE PREDICTABLE)')
+else:
+    print('The Null Hypothesis is rejected(It is a Random Walk)')
+
