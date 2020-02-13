@@ -205,3 +205,45 @@ if adfuller_test[1] > alpha:
 else:
     print('The Null Hypothesis is rejected(It is a Random Walk)')
 
+
+''' WHITE NOISE + RANDOM WALK + RANDOM WALK (WITH DRIFT)'''
+
+White_Noise = np.random.normal(loc=0, scale=1, size=5000)
+print('This is my WN:', White_Noise)
+
+White_Noise_plot = 1
+if White_Noise_plot == 1:
+    fig, axs = plt.subplots(nrows=3, ncols=1)
+    pd.DataFrame(White_Noise, columns=['Rnumbers']).plot(ax=axs[0])
+    pd.DataFrame(White_Noise, columns=['hist']).plot(kind='hist',alpha=0.8, ax=axs[1])
+    plot_acf(White_Noise, lags=20, alpha=0.2, ax=axs[2])
+    plt.show()
+
+
+steps = np.random.normal(loc=0, scale=1, size=500)
+steps[0] = 0
+Walk = 100 + np.cumsum(steps)
+print('This is my Random Walk:', Walk)
+
+
+steps_plot = 1
+if steps_plot == 1:
+    # fig, axs = plt.subplots(nrows=3, ncols=1)
+    plt.plot(Walk)
+    plot_acf(steps, lags=20, alpha=0.2)
+    plt.show()
+
+Steps1 = np.random.normal(loc=0.001, scale=0.01, size=500) + 1
+Steps1[0] = 1
+Walk = 100 * np.cumprod(Steps1)
+print('This is my drifted Random Walk: ', Walk)
+
+Steps1_plot = 1
+if Steps1_plot == 1:
+    # fig, axs = plt.subplots(nrows=3, ncols=1)
+    # pd.DataFrame(Steps1, columns=['Steps1nmbers']).plot(ax=axs[0])
+    # pd.DataFrame(Steps1, columns=['Step1_hist']).plot(kind='hist', alpha=0.8, ax=axs[1])
+    plt.plot(Walk)
+    plot_acf(Walk, lags=20, alpha=0.2)
+    plt.show()
+
