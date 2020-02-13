@@ -211,7 +211,7 @@ else:
 White_Noise = np.random.normal(loc=0, scale=1, size=5000)
 print('This is my WN:', White_Noise)
 
-White_Noise_plot = 1
+White_Noise_plot = 0
 if White_Noise_plot == 1:
     fig, axs = plt.subplots(nrows=3, ncols=1)
     pd.DataFrame(White_Noise, columns=['Rnumbers']).plot(ax=axs[0])
@@ -226,19 +226,19 @@ Walk = 100 + np.cumsum(steps)
 print('This is my Random Walk:', Walk)
 
 
-steps_plot = 1
+steps_plot = 0
 if steps_plot == 1:
     # fig, axs = plt.subplots(nrows=3, ncols=1)
     plt.plot(Walk)
     plot_acf(steps, lags=20, alpha=0.2)
     plt.show()
 
-Steps1 = np.random.normal(loc=0.001, scale=0.01, size=500) + 1
+Steps1 = np.random.normal(loc=0.001, scale=0.01, size=5000) + 1
 Steps1[0] = 1
 Walk = 100 * np.cumprod(Steps1)
 print('This is my drifted Random Walk: ', Walk)
 
-Steps1_plot = 1
+Steps1_plot = 0
 if Steps1_plot == 1:
     # fig, axs = plt.subplots(nrows=3, ncols=1)
     # pd.DataFrame(Steps1, columns=['Steps1nmbers']).plot(ax=axs[0])
@@ -246,4 +246,31 @@ if Steps1_plot == 1:
     plt.plot(Walk)
     plot_acf(Walk, lags=20, alpha=0.2)
     plt.show()
+
+'''ARMA (AUTO REGRESION MOVING AVERAGE'''
+
+# Step 1 (Simulation):
+
+from statsmodels.tsa.arima_process import ArmaProcess
+
+ar = np.array([1, 0.9])
+ma = np.array([1])
+AR_object = ArmaProcess(ar, ma)
+Simulated_data = AR_object.generate_sample(nsample=5000)
+print('This is my ARMA simulation:', Simulated_data)
+
+# Step 2 (Training):
+
+from statsmodels.tsa.arima_model import ARMA
+
+arma_model = ARMA(Blockchain_df['Bitcoins_in_circulation'], order=(1,0))
+arma_results = arma_model.fit()
+print('This is my trained ARMA model:', arma_results.summary())
+
+# Step 3 (Predicting):
+predict_data = arma_results.predict(start=100, end=1900)
+print('This is my predicted ARMA:', predict_data)
+arma_results.plot_predict(start=100, end=1900)
+plt.show()
+
 
