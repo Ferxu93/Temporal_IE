@@ -247,7 +247,7 @@ if Steps1_plot == 1:
     plot_acf(Walk, lags=20, alpha=0.2)
     plt.show()
 
-'''ARMA (AUTO REGRESION MOVING AVERAGE'''
+'''ARMA (AUTO REGRESSION MOVING AVERAGE'''
 
 # Step 1 (Simulation):
 
