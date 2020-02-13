@@ -268,6 +268,7 @@ arma_results = arma_model.fit()
 print('This is my trained ARMA model:', arma_results.summary())
 
 # Step 3 (Predicting):
+
 predict_data = arma_results.predict(start=100, end=1900)
 print('This is my predicted ARMA:', predict_data)
 arma_results.plot_predict(start=100, end=1900)
