@@ -55,6 +55,38 @@ if Multiploting == 1:
       coronavirus_df['Recovered'].plot(kind='line', color='purple')
       plt.grid(), plt.show(), plt.clf()
 
+'''WHITE NOISE & GAUSSIAN WHITE NOISE'''
+
+coronavirus_df_WN = 1
+if coronavirus_df_WN == 1:
+    fig, axs = plt.subplots(nrows=2, ncols=1)
+    coronavirus_df[['Deaths']].plot(ax=axs[0])
+    coronavirus_df[['Deaths']].plot(kind='hist',alpha=0.8, ax=axs[0])
+    plot_acf(coronavirus_df['Deaths'],lags=20, alpha=0.2, ax=axs[1])
+    plt.show()
+
+'''REGRESSION ANALYSIS'''
+
+import statsmodels.api as sma
+
+coronavirus_df = sma.add_constant(coronavirus_df)
+intercept_y = sma.OLS(coronavirus_df['Deaths'], coronavirus_df[['const','Recovered']]).fit()
+print('Results:', intercept_y.summary())
+print('Constant Coefficient:',intercept_y.params[0])
+print('Independent Variable:',intercept_y.params[1])
+
+'ADD FULLER TEST'
+from statsmodels.tsa.stattools import adfuller
+
+adfuller_test = adfuller(coronavirus_df['Deaths'])
+print(adfuller_test)
+print('p-value: ', adfuller_test[1])
+alpha = 0.05
+if adfuller_test[1] > alpha:
+    print('The Null Hypothesis cant be rejected: It may not be a Random Walk(IT MAY BE PREDICTABLE)')
+else:
+    print('The Null Hypothesis is rejected(It is a Random Walk)')
+
 from statsmodels.tsa.arima_process import ArmaProcess
 
 ar = np.array([1, 0,9])
