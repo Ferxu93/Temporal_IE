@@ -89,8 +89,8 @@ else:
 
 from statsmodels.tsa.arima_process import ArmaProcess
 
-ar = np.array([1, 0,9])
-ma = np.array([1])
+ar = np.array([1, 0.9])
+ma = np.array([1, 0.7])
 AR_object = ArmaProcess(ar, ma)
 Simulated_data = AR_object.generate_sample(nsample=5000)
 print('This is my ARMA simulation:', Simulated_data)
