@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import math
 import matplotlib.pyplot as plt
 
 desired_width = 320
@@ -15,3 +16,15 @@ Absenteeism_test_df = pd.read_csv('/Users/fer/Downloads/Absenteeism_at_work_clas
 
 print('\n Absenteeism Test:\n\n',Absenteeism_test_df)
 print('\n Absenteeism Training: \n\n',Absenteeism_training_df)
+
+def zlist(list):
+    typified_object = []
+    for item in list:
+        typified_item = (item - np.mean(list)) / np.std(list)
+        typified_object.append(typified_item)
+    return typified_object
+
+edad = [8,12,14,16,20,22,24,26,42,46,60]
+edad_tipificada = zlist(edad)
+print('list: ', edad)
+print('tipified list: ', [round(item, 2) for item in edad_tipificada])
