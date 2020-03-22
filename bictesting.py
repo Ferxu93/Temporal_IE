@@ -18,7 +18,7 @@ for p in range(1, 3):
         ma = np.array([q, phi - 0.1])
         AR_object = ArmaProcess(ar, ma)
         simulated_data = AR_object.generate_sample(nsample=5000)
-        print(simulated_data)
+        print(simulated_data) # ammedn by comment
 
         model = ARMA(simulated_data, order=(p, q))
         model_trained = model.fit()
