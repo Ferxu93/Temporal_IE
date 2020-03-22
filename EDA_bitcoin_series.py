@@ -133,6 +133,8 @@ usdjpy_df['ROLLED'] = usdjpy_df.index
 usdjpy_df.index = Blockchain_df.index
 print(usdjpy_df.head(40))
 
+
+
 year_df = pd.DatetimeIndex
 
 '''LAMBDAS(a one-liner great option)'''
@@ -254,10 +256,18 @@ if Steps1_plot == 1:
 from statsmodels.tsa.arima_process import ArmaProcess
 
 ar = np.array([1, 0.9])
-ma = np.array([1])
+ma = np.array([1, 0])
 AR_object = ArmaProcess(ar, ma)
 Simulated_data = AR_object.generate_sample(nsample=5000)
 print('This is my ARMA simulation:', Simulated_data)
+
+for p in range(1, 10):
+    for phi in np.arange(0.1, 0.99, 0.1):
+        ar = np.array([p, phi])
+        ma = np.array([p, phi - 0.1])
+        AR_object = ArmaProcess(ar, ma)
+        simulated_data = AR_object.generate_sample(nsample=5000)
+        print(simulated_data)
 
 # Step 2 (Training):
 
@@ -272,6 +282,13 @@ print('This is my trained ARMA model:', arma_results.summary())
 predict_data = arma_results.predict(start=100, end=1900)
 print('This is my predicted ARMA:', predict_data)
 arma_results.plot_predict(start=100, end=1900)
-plt.show()
+#plt.show()
 
+
+'''COINTEGRATION'''
+
+from statsmodels.tsa.stattools import coint
+
+Cointegration_serie = coint(Blockchain_df['USD/EUR'], Blockchain_df['USD/CHF'])
+print(Cointegration_serie[1])
 
