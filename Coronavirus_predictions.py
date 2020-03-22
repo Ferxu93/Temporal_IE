@@ -105,5 +105,3 @@ predict_data = arma_results.predict(start=72, end=140)
 print('This is my predicted ARMA:', predict_data)
 arma_results.plot_predict(start=0, end=200)
 plt.show()
-
-# Modified parameters in the ARMA Model: I changed the order of the ma model from 0 to 0.7 (new model) c
